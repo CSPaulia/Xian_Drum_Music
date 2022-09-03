@@ -3,6 +3,5 @@ log_dir/*
 model/*
 pitches/*
 Trainset/*
-test.py
 .DS_Store 
 */.DS_Store`
