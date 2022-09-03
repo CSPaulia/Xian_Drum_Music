@@ -9,10 +9,7 @@ In this project, U'd better to handle with the Dataset. Supposing there is a mus
 The dataset structure should be like
 > Trainset
 > > Song 1($P$)
-> > > Cut 1($P_1$)
->> Cut 2($P_2$)
->> $\cdots$
->> Cut n-k+1($P_{n-k+1}$)
+> > > Cut 1($P_1$)<br />Cut 2($P_2$)<br />$\cdots$ <br />  Cut n-k+1($P_{n-k+1}$)
 
 ## Environment preparation
 
