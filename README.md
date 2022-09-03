@@ -10,9 +10,13 @@ The dataset structure should be like
 > Trainset
 > > Song 1($P$)
 > > > Cut 1($P_1$)
-> > > Cut 2($P_2$)
-> > > $\cdots$
-> > > Cut n-k+1($P_{n-k+1}$)
+Cut 2($P_2$)
+$\cdots$
+Cut n-k+1($P_{n-k+1}$)
+
+## Environment preparation
+
+
 
 ## Train model
 
@@ -23,6 +27,22 @@ python train.py
 U can change the parameter of the model through the command line, like this
 ```
 python train.py --epoch 1000
+```
+
+## Plot model
+
+U can run the `plot_models.py` in terminal
+```
+python plot_models.py
+```
+U have to appoint the model path and the graphic of model construction will be saved in the same dir with the model.
+
+## Make music
+
+Before we make music, we have to supply the pitch data first. U can pick up all of pitches from a song as the pitch data and save them into a txt file.
+Then U can run the `makemusic.py` in terminal
+```
+python makemusic.py
 ```
 
 
