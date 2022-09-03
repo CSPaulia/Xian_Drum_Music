@@ -16,7 +16,10 @@ Cut n-k+1($P_{n-k+1}$)
 
 ## Environment preparation
 
-
+run the command in the command line
+```
+pip install -r requirement.txt
+```
 
 ## Train model
 
