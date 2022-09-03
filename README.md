@@ -10,9 +10,9 @@ The dataset structure should be like
 > Trainset
 > > Song 1($P$)
 > > > Cut 1($P_1$)
-Cut 2($P_2$)
-$\cdots$
-Cut n-k+1($P_{n-k+1}$)
+>> Cut 2($P_2$)
+>> $\cdots$
+>> Cut n-k+1($P_{n-k+1}$)
 
 ## Environment preparation
 
