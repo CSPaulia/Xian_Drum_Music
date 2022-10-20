@@ -14,8 +14,8 @@ warnings.filterwarnings("ignore")
 tensorflow.compat.v1.disable_eager_execution()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-modelpath = 'model/equilong15_categorial_crossentropy_adam_interval/model.h5'
-pitchespath = 'pitches/old_pitches'
+modelpath = 'model/equilong15_categorial_crossentropy_adam_interval/equilong_categorical_crossentropy_adam_interval.h5'
+pitchespath = 'pitches/实验pitches'
 outputpath = 'Composed/'
 filenotenum = 15
 b = 32
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     tags = np.load(args.tag_path)
     tags = list(tags)
 
-    pitchset, pitchesfrom = compose.cutpitches_pitchesrepeated(args.input_path, args.note_num)
+    pitchset, pitchesfrom, pauses = compose.cutpitches_pitchesrepeated(args.input_path, args.note_num)
     batchsize = args.batch_size
     pitchset = pitchset[0:int(len(pitchset)/batchsize)*batchsize]
     pitchesfrom = pitchesfrom[0:int(len(pitchesfrom)/batchsize)*batchsize]
@@ -46,4 +46,4 @@ if __name__ == '__main__':
     print('\033[1;35m Compose start-------------------------------------------------\033[0m')
     y = model.predict(pitchset_interval, batch_size=batchsize)
     y = compose.onehot2tag(y, tags)
-    compose.compose_newmusic_pitchesrepeated(pitchset, y, pitchesfrom, args.note_num, outputpath)
+    compose.compose_newmusic_pitchesrepeated(pitchset, y, pitchesfrom, args.note_num, outputpath, pauses)

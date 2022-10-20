@@ -86,15 +86,22 @@ def cutpitches(fp, fnn):
 #      与上一个函数不同，每个音高都可以作为一个音高数据的起始音高。
 def cutpitches_pitchesrepeated(fp, fnn):
     allpitches = []
+    allpause = []
     for filename in os.listdir(fp):
         pitches = []
+        pause = []
+        cnt = 0
         if filename != '.DS_Store':
             with open(fp + '/' + filename) as f:
                 for line in f.readlines():
                     line = line.strip('\n')
                     if line != '.':
                         pitches.append(int(line))
-        allpitches.append((pitches, filename))
+                        cnt += 1
+                    else:
+                        pause.append(cnt)
+            allpitches.append((pitches, filename))
+            allpause.append(pause)
     pitchset = []
     pitchesfrom = []
     for ps, f in allpitches:
@@ -105,7 +112,7 @@ def cutpitches_pitchesrepeated(fp, fnn):
             pitchesfrom.append(f)
     pitchset = np.array(pitchset)
     print('the shape of pitchset:', pitchset.shape)
-    return pitchset, pitchesfrom
+    return pitchset, pitchesfrom, allpause
 
 
 # 输入：pitches为音高数据，time为时长数据，datafrom为数据来源，fnn为音高数据切割长度
@@ -143,7 +150,7 @@ def compose_newmusic(pitches, time, datafrom, fnn):
 # 输入：pitches为音高数据，time为时长数据，datafrom为数据来源，fnn为音高数据切割长度
 # 输出：无
 # 特点：根据音高数据和时长数据构造音乐。
-def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath):
+def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath, allpause):
     if len(pitches) != len(time) or len(pitches) != len(datafrom) or len(time) != len(datafrom) or pitches.shape[1] != \
             time.shape[1]:
         print('Pitchset has different shape with timeset. Program terminated.')
@@ -188,8 +195,12 @@ def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath):
             res = Counter(song[i])
             song[i] = res.most_common(1)[0][0]
 
+    if len(pset) != len(allpause):
+        print('\033[1;31m Pitch set has different length with pause set.\033[0m')
+
     for i in range(len(pset)):
         lastend = 0
+        bartime_start = lastend
         cello_c_chord = pretty_midi.PrettyMIDI()
         cello_program = pretty_midi.instrument_name_to_program('Flute')
         cello = pretty_midi.Instrument(program=cello_program)
@@ -197,6 +208,11 @@ def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath):
             note = pretty_midi.Note(velocity=100, pitch=pset[i][j], start=lastend, end=lastend + tset[i][j])
             cello.notes.append(note)
             lastend = lastend + tset[i][j]
+            '''if (j+1) in allpause[i]:
+                bartime_end = lastend
+                bartime_rest = 1.2 * (int((bartime_end - bartime_start) / 1.2) + 1) - (bartime_end - bartime_start)
+                lastend = lastend + bartime_rest
+                bartime_start = lastend'''
         cello_c_chord.instruments.append(cello)
         print('Composing ' + datafrom[dfrange[i]].split('.')[0] + '.mid')
         cello_c_chord.write(outputpath + datafrom[dfrange[i]].split('.')[0] + '.mid')
