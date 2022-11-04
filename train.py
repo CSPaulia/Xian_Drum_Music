@@ -12,14 +12,14 @@ warnings.filterwarnings("ignore")
 tensorflow.compat.v1.disable_eager_execution()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-filepath = 'TrainSet/equilong15/'
-filenotenum = 15
+filenotenum = 25
+filepath = 'TrainSet/equilong' + str(filenotenum) + '/'
 
-modelsubdic = 'equilong15_categorial_crossentropy_adam_interval/'
+modelsubdic = 'equilong' + str(filenotenum) + '_categorial_crossentropy_adam_interval/'
 modelname = 'equilong_categorical_crossentropy_adam_interval.h5'
 
 EPOCHS = 100
-n_fold = 8
+n_fold = 20
 batchsize = 32
 
 def data_n_fold(x, y, foldnum, n):
@@ -59,6 +59,11 @@ def datacutrandom(x, y, foldnum):
     vy = vy[0:int(vy.shape[0] / batchsize) * batchsize]
     return dx, dy, vx, vy
 
+def data_batch(x, y):
+    dx = x[0:int(x.shape[0] / batchsize) * batchsize]
+    dy = y[0:int(y.shape[0] / batchsize) * batchsize]
+    return dx, dy
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train')
@@ -89,8 +94,9 @@ if __name__ == '__main__':
     model.add(keras.layers.Dense(units=datay.shape[2], activation='softmax'))
     model.summary()
     model.compile(loss=keras.losses.categorical_crossentropy, optimizer='adam', metrics=['categorical_accuracy'])
-    trainX, trainY, validX, validY = datacutrandom(datax, datay, n_fold)
-    model.fit(trainX, trainY, epochs=args.epoch, shuffle=False, verbose=1, validation_data=(validX, validY),
+    # trainX, trainY, validX, validY = datacutrandom(datax, datay, n_fold) # cut out validation
+    trainX, trainY = data_batch(datax, datay)
+    model.fit(trainX, trainY, epochs=args.epoch, shuffle=False, verbose=1, # validation_data=(validX, validY),
             batch_size=args.batch_size, callbacks=[TensorBoard(log_dir='./log_dir/' + modelsubdic)])
 
     isExists = os.path.exists('model/' + args.output_path)

@@ -44,8 +44,8 @@ def getdata(fp):
                         if not instrument.is_drum:
                             for note in instrument.notes:
                                 pitches.append([note.pitch])
-                                time.append([round(note.duration, 2)])
-                                tagset.add(round(note.duration, 2))
+                                time.append([round(note.end - note.start, 1)])
+                                tagset.add(round(note.end - note.start, 1))
                             DataX.append(pitches)
                             DataY.append(time)
                         pitches = []
@@ -63,7 +63,7 @@ def getdata(fp):
     tag = list(tagset)
     tag.sort()
     tag = np.array(tag)
-    np.save('TrainSet/tags/' + fp.replace('/', '_') + 'tag.npy', tag)
+    np.save('TrainSet/' + fp.replace('/', '_') + 'tag.npy', tag)
 
     return DataX, DataY, tagset
 
@@ -109,12 +109,12 @@ def datacut(fp, fnn, tagset):
                     midi_data = pretty_midi.PrettyMIDI(fp + midi)
                     for instrument in midi_data.instruments:
                         if not instrument.is_drum:
-                            for i in range(len(instrument.notes) - fnn + 1):
+                            for i in range(int(len(instrument.notes) / fnn)):
                                 pitches = []
                                 time = []
-                                for j in range(i, i + fnn):
+                                for j in range(i * fnn, i * fnn + fnn):
                                     pitches.append([instrument.notes[j].pitch])
-                                    time.append([round(instrument.notes[j].duration, 2)])
+                                    time.append([round(instrument.notes[j].end - instrument.notes[j].start, 1)])
                                 datax.append(pitches)
                                 datay.append(time)
                                 datafrom.append(midi)
@@ -147,7 +147,5 @@ def pitch2interval(traindata):
 if __name__ == '__main__':
     checkdata(filepath, filenotenum)
     datax, datay, tags = getdata(filepath)
-    datax = pitch2interval(datax)
     datax, datay, datafrom = datacut('TrainSet/39midi/', filenotenum, tags)
     datax = pitch2interval(datax)
-    i = 1

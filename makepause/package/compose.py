@@ -106,8 +106,8 @@ def cutpitches_pitchesrepeated(fp, fnn):
     pitchesfrom = []
     for ps, f in allpitches:
         for i in range(len(ps) - fnn + 1):
-            pitches = np.array(ps[i:i + fnn])
-            pitches = np.reshape(pitches, (fnn, 1))
+            pitches = np.array(ps[i:i + 15])
+            pitches = np.reshape(pitches, (15, 1))
             pitchset.append(pitches)
             pitchesfrom.append(f)
     pitchset = np.array(pitchset)
@@ -150,7 +150,7 @@ def compose_newmusic(pitches, time, datafrom, fnn):
 # 输入：pitches为音高数据，time为时长数据，datafrom为数据来源，fnn为音高数据切割长度
 # 输出：无
 # 特点：根据音高数据和时长数据构造音乐。
-def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath): #, allpause, usepause):
+def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath, allpause, usepause):
     if len(pitches) != len(time) or len(pitches) != len(datafrom) or len(time) != len(datafrom) or pitches.shape[1] != \
             time.shape[1]:
         print('Pitchset has different shape with timeset. Program terminated.')
@@ -195,25 +195,25 @@ def compose_newmusic_pitchesrepeated(pitches, time, datafrom, fnn, outputpath): 
             res = Counter(song[i])
             song[i] = res.most_common(1)[0][0]
 
-    '''if len(pset) != len(allpause):
-        print('\033[1;31m Pitch set has different length with pause set.\033[0m')'''
+    if len(pset) != len(allpause):
+        print('\033[1;31m Pitch set has different length with pause set.\033[0m')
 
     for i in range(len(pset)):
         lastend = 0
         bartime_start = lastend
         cello_c_chord = pretty_midi.PrettyMIDI()
-        cello_program = pretty_midi.instrument_name_to_program('Acoustic Grand Piano')
+        cello_program = pretty_midi.instrument_name_to_program('Flute')
         cello = pretty_midi.Instrument(program=cello_program)
         for j in range(len(pset[i])):
             note = pretty_midi.Note(velocity=100, pitch=pset[i][j], start=lastend, end=lastend + tset[i][j])
             cello.notes.append(note)
             lastend = lastend + tset[i][j]
-            '''if (j+1) in allpause[i]:
+            if (j+1) in allpause[i]:
                 if usepause:
                     bartime_end = lastend
                     bartime_rest = 1.2 * (int((bartime_end - bartime_start) / 1.2) + 1) - (bartime_end - bartime_start)
                     lastend = lastend + bartime_rest
-                    bartime_start = lastend'''
+                    bartime_start = lastend
         cello_c_chord.instruments.append(cello)
         print('Composing ' + datafrom[dfrange[i]].split('.')[0] + '.mid')
         cello_c_chord.write(outputpath + datafrom[dfrange[i]].split('.')[0] + '.mid')
