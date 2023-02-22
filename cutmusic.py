@@ -1,7 +1,7 @@
 import os
 import pretty_midi
 
-filenotenum = 25
+filenotenum = 35
 musicdir = 'TrainSet/39midi/'
 outputdir = 'TrainSet/equilong' + str(filenotenum) + '/'
 os.makedirs(outputdir)

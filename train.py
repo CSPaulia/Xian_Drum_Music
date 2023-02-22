@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 tensorflow.compat.v1.disable_eager_execution()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-filenotenum = 25
+filenotenum = 35
 filepath = 'TrainSet/equilong' + str(filenotenum) + '/'
 
 modelsubdic = 'equilong' + str(filenotenum) + '_categorial_crossentropy_adam_interval/'

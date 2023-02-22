@@ -91,18 +91,19 @@ if __name__ == '__main__':
 
     acc = accuracy_score(dur_origin, dur_new)
     print('Accuracy indeed:', acc)
-    cm = confusion_matrix(dur_origin, dur_new)
-    plt.matshow(cm, cmap=plt.cm.Blues)
-    for i in range(len(cm)):
-        for j in range(len(cm)):
-            if cm[j, i] > 0:
-                plt.annotate(cm[j, i], xy=(i, j), horizontalalignment='center', verticalalignment='center')
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    # plt.ylabel('True label', fontdict={'family': 'Times New Roman', 'size': 20})
-    # plt.xlabel('Predicted label', fontdict={'family': 'Times New Roman', 'size': 20})
-    plt.xticks(range(0, len(tagset_new)), labels=tagset_new) # 将x轴或y轴坐标，刻度 替换为文字/字符
-    plt.yticks(range(0, len(tagset_new)), labels=tagset_new)
-    plt.show()
+    # Draw Confusion Matrix
+    # cm = confusion_matrix(dur_origin, dur_new)
+    # plt.matshow(cm, cmap=plt.cm.Blues)
+    # for i in range(len(cm)):
+    #     for j in range(len(cm)):
+    #         if cm[j, i] > 0:
+    #             plt.annotate(cm[j, i], xy=(i, j), horizontalalignment='center', verticalalignment='center')
+    # plt.ylabel('True label')
+    # plt.xlabel('Predicted label')
+    # # plt.ylabel('True label', fontdict={'family': 'Times New Roman', 'size': 20})
+    # # plt.xlabel('Predicted label', fontdict={'family': 'Times New Roman', 'size': 20})
+    # plt.xticks(range(0, len(tagset_new)), labels=tagset_new) # 将x轴或y轴坐标，刻度 替换为文字/字符
+    # plt.yticks(range(0, len(tagset_new)), labels=tagset_new)
+    # plt.show()
 
 
